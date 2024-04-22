@@ -11,6 +11,10 @@ import { RegistroComponent } from './components/registro/registro.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 import { NoFoundComponent } from './components/no-found/no-found.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,6 +33,14 @@ import { FooterComponent } from './components/footer/footer.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule, 
+    FormsModule, 
+    ToastrModule.forRoot({
+      positionClass: 'toast-top-center',
+      closeButton: true,
+      timeOut: 3000
+    }),
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
