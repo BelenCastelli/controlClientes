@@ -46,9 +46,8 @@ function postClient(req, res){
         ClienteSchema.create(cliente)
         .then(function(cliente) {
             console.log(cliente);
-            respuesta = {error: false, codigo:200, mensaje: 'Dato insertado correctamente', data: cliente}
+            respuesta = {error: false, codigo:200, mensaje: 'Cliente insertado correctamente', data: cliente}
             res.json(respuesta);
-            mongoose.disconnect();
         })
         .catch(error => {
             console.log(error);
@@ -59,9 +58,58 @@ function postClient(req, res){
         respuesta = {error: true, codigo:200, mensaje:'Error en el servidor'}
         res.status(400).json(respuesta)
     }
-
-
-
 }
 
-module.exports = {getStart, postClient, getClients}
+function getCliente(req, res){
+    let respuesta; 
+    let _id = req.query._id
+
+    ClienteSchema.findById(_id)
+    .then((cliente) => {
+        console.log(cliente);
+        respuesta = {error: false, codigo: 200, mensaje: 'Cliente recuperado correctamente', data: cliente}
+        res.json(respuesta)
+    })
+}
+
+function putcliente(req, res){
+    let respuesta; 
+    let cliente = new ClienteSchema(
+        {
+            apellido: req.body.apellido,
+            email: req.body.email,
+            nombre: req.body.nombre,
+            saldo: req.body.saldo,
+            _id: req.body._id
+        }
+    )
+    if(cliente){
+        ClienteSchema.findByIdAndUpdate(cliente.id, {nombre: cliente.nombre, apellido: cliente.apellido, 
+            email: req.body.email, saldo: cliente.saldo})
+        .then((cliente) => {
+        respuesta = {error: false, codigo: 200, mensaje: 'Cliente modificado correctamente'}
+        res.json(respuesta)
+        })
+        .catch(error => {
+
+            respuesta = {error: true, codigo: 500, mensaje:'Error en la validación de los datos modificados'};
+            res.json(respuesta);
+        })
+    } else {
+        respuesta = {error: true, codigo:200, mensaje:'Error en el servidor'}
+        res.status(400).json(respuesta)
+    }
+}
+
+function deleteCliente(req, res){
+    let respuesta; 
+    let _id = req.body._id
+    ClienteSchema.findByIdAndDelete(_id)
+    .then((cliente) => {
+        console.log(cliente);
+        respuesta = {error: false, codigo: 200, mensaje: 'Cliente eliminado correctamente'}
+        res.json(respuesta)
+    })
+}
+
+module.exports = {getStart, postClient, getClients, getCliente,putcliente, deleteCliente}

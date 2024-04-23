@@ -2,9 +2,9 @@ const {Schema, model} = require('mongoose')
 
 const ClienteSchema = new Schema (
     {
+        nombre: String, 
         apellido: String, 
         email: String, 
-        nombre: String, 
         saldo: Number
     }
 )

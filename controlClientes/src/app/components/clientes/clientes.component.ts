@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { Cliente } from 'src/app/models/cliente';
@@ -28,11 +28,7 @@ export class ClientesComponent implements OnInit {
   getClientes(){
     this.clienteService.getClientes().subscribe((res:any) =>{
       this.clientes = res.data
-      
-      console.log(this.clientes);
-      
     })
-   
   }
 
   getSaldoTotal(){
@@ -49,9 +45,22 @@ export class ClientesComponent implements OnInit {
 
   agregar(form: NgForm){
   if(!form.valid){
-    this.toastr.error('Atención', 'Rellena correctamente el formulario')
+    this.toastr.error('Rellena correctamente el formulario','Atención')
   } else {
+    console.log(form.value);
+    
+      this.clienteService.postCLiente(form.value).subscribe((res:any) => {
+        if(!res.error)
+          this.toastr.success(res.mensaje, 'Éxito')
+          this.getClientes()
+          form.reset()
+      })
+  }
+  }
 
+  getCliente(id:string){
+    
   }
-  }
+
+
 }
