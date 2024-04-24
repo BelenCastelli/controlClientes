@@ -58,9 +58,7 @@ export class ClientesComponent implements OnInit {
   }
   }
 
-  getCliente(id:string){
-    
-  }
+  
 
 
 }

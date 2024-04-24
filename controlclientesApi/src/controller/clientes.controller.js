@@ -1,5 +1,20 @@
 const {mongoose } = require('mongoose');
 const ClienteSchema = require('../model/clientes')
+const jwt = require('jsonwebtoken');
+
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+    console.log(req.headers['authorization']);
+
+    if (!token) return res.status(401).send({ error: true, message: 'Token no proporcionado' });
+
+    jwt.verify(token, 'secreto', (err, user) => {
+        console.log(err);
+        if (err) return res.status(403).send({ error: true, message: 'Token inválido' });
+        req.user = user;
+        next();
+    });
+}
 
 function getStart(req, res){
     res.json({error:false, code: 200, message: 'Punto de inicio'})
@@ -112,4 +127,4 @@ function deleteCliente(req, res){
     })
 }
 
-module.exports = {getStart, postClient, getClients, getCliente,putcliente, deleteCliente}
+module.exports = {authenticateToken,getStart, postClient, getClients, getCliente,putcliente, deleteCliente}
